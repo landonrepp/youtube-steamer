@@ -1,0 +1,1 @@
+export const GETURL = "http://localhost:5000";
