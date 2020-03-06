@@ -1,6 +1,6 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import React from 'react';
-import ExploreContainer from '../components/Media/MediaPlayer';
+import MediaPlayer from '../components/Media/MediaPlayer';
 import './Home.css';
 
 const Home: React.FC = () => {
@@ -8,16 +8,16 @@ const Home: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Blank</IonTitle>
+          <IonTitle>Cecil Reborn</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent>
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Blank</IonTitle>
+            <IonTitle size="large">Cecil Reborn</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer />
+        <MediaPlayer/>
       </IonContent>
     </IonPage>
   );

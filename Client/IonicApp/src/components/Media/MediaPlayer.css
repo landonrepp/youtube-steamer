@@ -1,15 +1,21 @@
-#progressContainer{
+.button-selected{
+    background-color: rgb(4, 109, 109) !important;
+}
+#progress-container{
     height:10px;
     background-color: black;
 }
-#progressBar{
+#progress-bar{
     height:10px;
     background-color: wheat;
     width:0%;
 }
-.pausePlay{
+.pause-play{
     transition: width 2s;
 }
 .noDisplay{
     display:none;
+}
+.media-progress-bar{
+    --knob-size:0
 }

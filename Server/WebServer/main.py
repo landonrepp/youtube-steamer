@@ -55,7 +55,7 @@ def after_request(response):
 @app.route("/youtube")
 def downloadVid():
     video_id = request.args.get('v','')
-    video_format = request.args.get('f','')
+    video_format = request.args.get('f','mp3')
     video_file_name = 'Server/Videos/%s.%s'%(video_id,video_format)
     
     if not path.exists(video_file_name):

@@ -1,5 +1,5 @@
 import React, { useState, Suspense } from 'react';
-import { IonIcon, IonGrid, IonRow, IonCol, IonItem } from '@ionic/react';
+import { IonIcon, IonGrid, IonRow, IonCol, IonItem, IonRange, IonVirtualScroll, IonContent } from '@ionic/react';
 import ReactDOM from 'react-dom'
 import { arrowBackCircleOutline, arrowForwardCircleOutline, play, } from 'ionicons/icons'
 import {Howl, Howler} from 'howler';
@@ -8,118 +8,159 @@ import { MediaService } from '../../services/MediaService'
 import { faCoffee, faPlay, faBackward, faForward, faPause } from '@fortawesome/free-solid-svg-icons'
 import './MediaPlayer.css'
 import { GETURL } from '../../Constants';
+import { ScrollView } from 'react-native';
+import ListHandler from '../ListHandler/ListHandler';
+import { Video } from '../../Models/MediaModels';
 
 interface MeadiaPlayerProps {}
 
 
 export interface ProgressBarProps {
-    
+    progress:number
 }
  
 export interface ProgressBarState {
     
 }
  
-class ProgressBar extends React.Component<ProgressBarProps, ProgressBarState> {
-    state = { 
-        progress:0
-    }
-
-    setProgress = (pro:number) =>{
-        this.state.progress = pro;
-        this.setState(this.state);
-    }
-    render() { 
-        return (
-            <div id="progressContainer">
-                <div id="progressBar" style={{width: this.state.progress + "%"}}></div>
-            </div>
-        );
-    }
-}
- 
 
 export interface MediaPlayerProps {
-    
+    videos:Video[]
 }
  
 export interface MediaPlayerState {
     
 }
-interface State{
+export interface State{
     playing:boolean,
-    videos:any[]
+    progress:number
 }
  
 class MediaPlayer extends React.Component<MediaPlayerProps, MediaPlayerState> {
-    Sounds = new Howl({src: ["http://localhost:5000/youtube?v=h1sCiXTlR8Q&f=mp3","http://localhost:5000/youtube?v=h1sCiXTlR8Q&f=mp3"], format:["mp3"]});
-
+    Sounds = new Howl({src: [""], format:["mp3"]});
+    songSelected = false;
     state:State = {
-        playing:true, 
-        videos:[]
+        playing:false, 
+        progress:0
+    };
+    nextSong = ()=>{
+        let i = 0;
+        const len = this.props.videos.length;
+        for(i = 0; i < len; i++){
+            if(this.props.videos[i].selected){
+                this.playSong(this.props.videos[(i+1)%len]);
+                return;
+            }
+        }
+    };
+    previousSong =()=>{
+        let i = 0;
+        const len = this.props.videos.length;
+        for(i = 0; i < len; i++){
+            if(this.props.videos[i].selected){
+                this.playSong(this.props.videos[(i-1)%len]);
+            }
+        }
+    }
+    setProgress = () =>{
+        if(this.Sounds.state() == "loaded"){
+            this.setState({progress:Number(this.Sounds.seek())/this.Sounds.duration()*100});
+        }
+        
+    };
+    
+    CreateHowl = (video:Video)=>{
+        let videoUrl = `${GETURL}/youtube?v=${video.videoID}&f=${video.ext}`
+        return new Howl({
+            src:videoUrl, format:"mp3", volume:0.1,
+            onend: (id)=>{
+                console.log("song ended");
+                this.nextSong();
+            }
+        });
+    };
+    togglePlaying = () =>{
+        if(!this.songSelected && this.props.videos.length > 0){
+            this.songSelected = true;
+            this.playSong(this.props.videos[0]);
+        }
+        else if(this.state.playing){
+            this.Sounds.pause();
+            this.state.playing = false;
+        }
+        else{
+            this.Sounds.play();
+            this.state.playing = true;
+        }
+        this.setState(this.state);
+    };
+
+    playSong = (video:Video)=>{
+        this.props.videos.forEach((element,index) => {
+            if(element.videoID == video.videoID){
+                this.props.videos[index].selected = true;
+            }
+            else{
+                this.props.videos[index].selected = false;
+            }
+        });
+        this.songSelected = true;
+        let videoID = video.videoID;
+        let ext = video.ext;
+        
+
+        this.Sounds.unload();
+        this.Sounds = this.CreateHowl(video);
+        this.Sounds.play();
+        this.state.playing = true;
+        video.selected = true;
+        this.setState({videos:this.props.videos});
+    };
+    changeSongProgress = (e:any)=>{
+        let val = (e.target as any).value as number;
+        if(val && val != this.state.progress){
+            this.state.progress = val;
+            this.Sounds.seek(val/100 * this.Sounds.duration())
+        }
     }
     MusicList = async()=>{
         let videoInformation = await MediaService.getVideoInformation();
         let results:any[] = videoInformation;
-        this.state.videos = results;
+        this.props.videos = results;
         this.setState({videos:results})
-    }
-    togglePlaying = () =>{
-        this.Sounds.pause();
-        console.log(this.Sounds.playing());
-        this.MusicList();
-        this.state.playing = !this.state.playing;
-        this.setState(this.state);
+    };
+    
+    componentDidMount(){
         
-    }
+        setInterval(this.setProgress,1000);
+    };
 
-    playSong = (videoID:string, ext:string)=>{
-        let videoUrl = `${GETURL}/youtube?v=${videoID}&f=${ext}`
-        console.log(videoUrl);
-        // this.Sounds = new Howl({src: ["http://localhost:5000/youtube?v=h1sCiXTlR8Q&f=mp3"], format:"mp3"})
-        this.setState({})
-        this.Sounds.play();
-    }
     render() { 
-        this.Sounds.play();
-
         const element = (
-            <div>
+            <div onMouseUp={this.changeSongProgress}>
                 <IonGrid>
-                    
-                    <IonRow>
-                        <IonCol>
-                            <div>
-                                <Suspense fallback= {<div>Loading...</div>}>
-                                    {this.state.videos.map(result =>{
-                                        return <IonItem onClick={this.playSong.bind(this,result.videoID, result.ext)}>{result.title}</IonItem>;
-                                    })}
-                                </Suspense>
-                            </div>
-                        </IonCol>
-                    </IonRow>
                     <IonRow>
                         <IonCol>
                         </IonCol>
                         <IonCol size="8" sizeLg="4">
-                            <ProgressBar></ProgressBar>
+                            <IonRange className="media-progress-bar" value={this.state.progress} onIonChange={this.changeSongProgress} color="secondary" pin={false} />
                         </IonCol>
                         <IonCol>
                         </IonCol>
                     </IonRow>
                     <IonRow>
-                        <IonCol sizeLg="5">
+                        <IonCol sizeLg="3">
                         </IonCol>
-                        <IonCol size="1">
-                            <FontAwesomeIcon size="2x" icon={faBackward} />
+                        <IonCol size="1" style={{"min-width":"max-content"}}>
+                            <FontAwesomeIcon size="2x" onClick={this.previousSong} icon={faBackward} />
                         </IonCol>
-                        <IonCol size="1">
-                            <FontAwesomeIcon className="pausePlay" onClick={this.togglePlaying} size="2x" icon={this.state.playing? faPlay : faPause} />
+                        <IonCol size="1" style={{"min-width":"max-content"}}>
+                            <FontAwesomeIcon className="pause-play" onClick={this.togglePlaying} size="2x" icon={this.state.playing? faPause:faPlay} />
                         </IonCol>
-                        <IonCol size="1">
-                            <FontAwesomeIcon size="2x" icon={ faForward } />
+                        <IonCol size="1" style={{"min-width":"max-content"}}>
+                            <FontAwesomeIcon size="2x" onClick={this.nextSong} icon={ faForward } />
                         </IonCol>
-                        <IonCol sizeLg="5">
+                        <IonCol sizeLg="3">
                         </IonCol>
                     </IonRow>
                 </IonGrid>
