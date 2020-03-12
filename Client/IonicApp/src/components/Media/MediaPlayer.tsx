@@ -6,11 +6,11 @@ import {Howl, Howler} from 'howler';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { MediaService } from '../../services/MediaService'
 import { faCoffee, faPlay, faBackward, faForward, faPause } from '@fortawesome/free-solid-svg-icons'
-import './MediaPlayer.css'
-import { GETURL } from '../../Constants';
+import './MediaPlayer.css';
 import { ScrollView } from 'react-native';
 import ListHandler from '../ListHandler/ListHandler';
-import { Video } from '../../Models/MediaModels';
+import { Video } from '../../models/MediaModels';
+import { MediaController } from '../../controllers/MediaController';
 
 interface MeadiaPlayerProps {}
 
@@ -18,121 +18,67 @@ interface MeadiaPlayerProps {}
 export interface ProgressBarProps {
     progress:number
 }
- 
+
 export interface ProgressBarState {
     
 }
  
 
 export interface MediaPlayerProps {
-    videos:Video[]
 }
  
 export interface MediaPlayerState {
-    
-}
-export interface State{
     playing:boolean,
-    progress:number
+    progress:number   
 }
  
 class MediaPlayer extends React.Component<MediaPlayerProps, MediaPlayerState> {
-    Sounds = new Howl({src: [""], format:["mp3"]});
-    songSelected = false;
-    state:State = {
-        playing:false, 
-        progress:0
-    };
-    nextSong = ()=>{
-        let i = 0;
-        const len = this.props.videos.length;
-        for(i = 0; i < len; i++){
-            if(this.props.videos[i].selected){
-                this.playSong(this.props.videos[(i+1)%len]);
-                return;
-            }
-        }
-    };
-    previousSong =()=>{
-        let i = 0;
-        const len = this.props.videos.length;
-        for(i = 0; i < len; i++){
-            if(this.props.videos[i].selected){
-                this.playSong(this.props.videos[(i-1)%len]);
-            }
-        }
+    mediaController = new MediaController();
+    constructor(props:MediaPlayerProps){
+        super(props);
+        this.state = {
+            playing:false,
+            progress:0
+        };
     }
     setProgress = () =>{
-        if(this.Sounds.state() == "loaded"){
-            this.setState({progress:Number(this.Sounds.seek())/this.Sounds.duration()*100});
+        if(this.mediaController.Sounds.state() == "loaded"){
+            this.setState({progress:Number(this.mediaController.seek())/this.mediaController.Sounds.duration()*100});
         }
-        
-    };
-    
-    CreateHowl = (video:Video)=>{
-        let videoUrl = `${GETURL}/youtube?v=${video.videoID}&f=${video.ext}`
-        return new Howl({
-            src:videoUrl, format:"mp3", volume:0.1,
-            onend: (id)=>{
-                console.log("song ended");
-                this.nextSong();
-            }
-        });
-    };
-    togglePlaying = () =>{
-        if(!this.songSelected && this.props.videos.length > 0){
-            this.songSelected = true;
-            this.playSong(this.props.videos[0]);
-        }
-        else if(this.state.playing){
-            this.Sounds.pause();
-            this.state.playing = false;
-        }
-        else{
-            this.Sounds.play();
-            this.state.playing = true;
-        }
-        this.setState(this.state);
-    };
-
-    playSong = (video:Video)=>{
-        this.props.videos.forEach((element,index) => {
-            if(element.videoID == video.videoID){
-                this.props.videos[index].selected = true;
-            }
-            else{
-                this.props.videos[index].selected = false;
-            }
-        });
-        this.songSelected = true;
-        let videoID = video.videoID;
-        let ext = video.ext;
-        
-
-        this.Sounds.unload();
-        this.Sounds = this.CreateHowl(video);
-        this.Sounds.play();
-        this.state.playing = true;
-        video.selected = true;
-        this.setState({videos:this.props.videos});
     };
     changeSongProgress = (e:any)=>{
         let val = (e.target as any).value as number;
         if(val && val != this.state.progress){
-            this.state.progress = val;
-            this.Sounds.seek(val/100 * this.Sounds.duration())
+            this.setState({progress:val});
+            this.mediaController.seek(val/100 * this.mediaController.duration())
         }
     }
-    MusicList = async()=>{
-        let videoInformation = await MediaService.getVideoInformation();
-        let results:any[] = videoInformation;
-        this.props.videos = results;
-        this.setState({videos:results})
+    
+    togglePlaying = () =>{
+        if(this.state.playing){
+            this.mediaController.pause();
+        }
+        else{
+            this.mediaController.play();
+        }
+        // this.setState(this.state);
     };
     
+    updatePlayButton = ()=>{
+        // console.log(`${this.mediaController.playing?"playing":"paused"}`)
+        this.setState({playing:this.mediaController.playing},()=>{
+            console.log(this.state);
+        });
+        // this.setState({})
+    }
+    
     componentDidMount(){
-        
         setInterval(this.setProgress,1000);
+        this.mediaController.events.subscribe("SoundPlayed",this.updatePlayButton)
+        this.mediaController.events.subscribe("SoundPaused",this.updatePlayButton)
+        this.mediaController.events.subscribe("SoundSeeked",(_event)=>{
+            console.log("sound Seeked");
+        })
     };
 
     render() { 
@@ -151,14 +97,14 @@ class MediaPlayer extends React.Component<MediaPlayerProps, MediaPlayerState> {
                     <IonRow>
                         <IonCol sizeLg="3">
                         </IonCol>
-                        <IonCol size="1" style={{"min-width":"max-content"}}>
-                            <FontAwesomeIcon size="2x" onClick={this.previousSong} icon={faBackward} />
+                        <IonCol size="1" style={{"minWidth":"max-content"}}>
+                            <FontAwesomeIcon size="2x" onClick={this.mediaController.previousSong} icon={faBackward} />
                         </IonCol>
-                        <IonCol size="1" style={{"min-width":"max-content"}}>
+                        <IonCol size="1" style={{"minWidth":"max-content"}}>
                             <FontAwesomeIcon className="pause-play" onClick={this.togglePlaying} size="2x" icon={this.state.playing? faPause:faPlay} />
                         </IonCol>
-                        <IonCol size="1" style={{"min-width":"max-content"}}>
-                            <FontAwesomeIcon size="2x" onClick={this.nextSong} icon={ faForward } />
+                        <IonCol size="1" style={{"minWidth":"max-content"}}>
+                            <FontAwesomeIcon size="2x" onClick={this.mediaController.nextSong} icon={ faForward } />
                         </IonCol>
                         <IonCol sizeLg="3">
                         </IonCol>
