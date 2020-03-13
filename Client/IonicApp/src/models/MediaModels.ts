@@ -11,5 +11,5 @@ export interface MediaListItemValues{
     subtitle:string,
     image:string,
     selected:boolean,
-    onSelect: () => Promise<any>
+    onSelect: () => any
 };

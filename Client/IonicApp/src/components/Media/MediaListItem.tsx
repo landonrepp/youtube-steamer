@@ -17,7 +17,10 @@ class MediaListItem extends React.Component<MediaListItemProps, MediaListItemSta
     }
     render() { 
         return ( 
-            <IonItem button color="primary" onSelect = {this.props.mediaListItemValues.onSelect}>
+            <IonItem button color={this.props.mediaListItemValues.selected?"primary":"secondary"} onClick = {()=>{
+                console.log("got here")
+                this.props.mediaListItemValues.onSelect()
+            }}>
                 <IonGrid>
                     <IonRow>
                         <IonCol size="2">
@@ -29,9 +32,9 @@ class MediaListItem extends React.Component<MediaListItemProps, MediaListItemSta
                             <IonLabel>
                                 {this.props.mediaListItemValues.title}
                             </IonLabel>
-                            <IonLabel>
-                                {this.props.mediaListItemValues.subtitle}
-                            </IonLabel>
+                            <p style={{fontSize:"10px"}}>
+                                By - {this.props.mediaListItemValues.subtitle}
+                            </p>
                         </IonCol>
                         <IonCol>
 

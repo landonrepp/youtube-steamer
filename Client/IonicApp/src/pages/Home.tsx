@@ -9,6 +9,7 @@ import {MediaController} from '../controllers/MediaController'
 import { verify } from 'crypto';
 import { resolve } from 'dns';
 import { rejects } from 'assert';
+import { promises } from 'fs';
 
 
 
@@ -29,6 +30,7 @@ export class Home extends React.Component<HomeProps, HomeState> {
   }
   mediaController = new MediaController();
   componentDidMount = ()=>{
+    console.log("home mounted")
     let setVideos = ()=>{
       this.setState({videoListItemValues:this.mediaController.Videos.map(element=>{
         let val: MediaListItemValues = {
@@ -38,9 +40,10 @@ export class Home extends React.Component<HomeProps, HomeState> {
           image:element.thumbnail,
           onSelect:()=>{
             let video = element;
-            return new Promise((resolve,reject)=>{
-              return element;
-            });
+            console.log(video)
+            this.mediaController.playSong(video);
+            this.mediaController.play();
+            setVideos();
           }
         }
         return val;

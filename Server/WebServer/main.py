@@ -8,6 +8,7 @@ from flask_mysqldb import MySQL
 import json
 from csv import writer
 from flask_cors import CORS
+from flask_dance.contrib.google import google, make_google_blueprint
 
 
 app = Flask(__name__)
@@ -19,6 +20,8 @@ app.config['MYSQL_PASSWORD'] = 'password'
 app.config['MYSQL_DB'] = 'Player'
 mysql = MySQL(app)
 
+
+# google_bp = make_google_blueprint(client_id=None, client_secret=None, scope=None, offline=False, reprompt_consent=False, reprompt_select_account=False, redirect_url=None, redirect_to=None, login_url=None, authorized_url=None, session_class=None, storage=None, hosted_domain=None)
 
 SAVE_PATH = "../Videos"
 
