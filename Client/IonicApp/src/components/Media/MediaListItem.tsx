@@ -18,8 +18,8 @@ class MediaListItem extends React.Component<MediaListItemProps, MediaListItemSta
     render() { 
         return ( 
             <IonItem button color={this.props.mediaListItemValues.selected?"primary":"secondary"} onClick = {()=>{
-                console.log("got here")
-                this.props.mediaListItemValues.onSelect()
+                console.log("got here");
+                (this.props.mediaListItemValues.onSelect || function (){})()
             }}>
                 <IonGrid>
                     <IonRow>

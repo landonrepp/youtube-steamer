@@ -23,8 +23,8 @@ class MediaList extends React.Component<MediaListProps, MediaListState> {
         
         return ( 
             <div>
-                {this.props.lineItems.map(item=>{
-                    return <MediaListItem mediaListItemValues = {item}></MediaListItem>
+                {this.props.lineItems.map((item,index)=>{
+                    return <MediaListItem key={index.toString()} mediaListItemValues = {item}></MediaListItem>
                 })}
             </div>
          );

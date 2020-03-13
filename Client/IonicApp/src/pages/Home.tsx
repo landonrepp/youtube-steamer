@@ -4,8 +4,8 @@ import MediaPlayer from '../components/Media/MediaPlayer';
 import './Home.css';
 import MediaListItem from '../components/Media/MediaListItem';
 import MediaList from '../components/Media/MediaList';
-import { MediaListItemValues,Video } from '../models/MediaModels'
-import {MediaController} from '../controllers/MediaController'
+import { MediaListItemValues, Video } from '../models/MediaModels'
+import { MediaController } from '../controllers/MediaController'
 import { verify } from 'crypto';
 import { resolve } from 'dns';
 import { rejects } from 'assert';
@@ -14,13 +14,13 @@ import { promises } from 'fs';
 
 
 export interface HomeProps {
-  
+
 }
- 
+
 export interface HomeState {
-  videoListItemValues:MediaListItemValues[]
+  videoListItemValues: MediaListItemValues[]
 }
- 
+
 export class Home extends React.Component<HomeProps, HomeState> {
   constructor(props: HomeProps) {
     super(props);
@@ -29,30 +29,32 @@ export class Home extends React.Component<HomeProps, HomeState> {
     }
   }
   mediaController = new MediaController();
-  componentDidMount = ()=>{
+  componentDidMount = () => {
     console.log("home mounted")
-    let setVideos = ()=>{
-      this.setState({videoListItemValues:this.mediaController.Videos.map(element=>{
-        let val: MediaListItemValues = {
-          selected:element.selected,
-          title:element.title,
-          subtitle: element.author,
-          image:element.thumbnail,
-          onSelect:()=>{
-            let video = element;
-            console.log(video)
-            this.mediaController.playSong(video);
-            this.mediaController.play();
-            setVideos();
+    let setVideos = () => {
+      this.setState({
+        videoListItemValues: this.mediaController.Videos.map(element => {
+          let val: MediaListItemValues = {
+            selected: element.selected,
+            title: element.title,
+            subtitle: element.author,
+            image: element.thumbnail,
+            onSelect: () => {
+              let video = element;
+              console.log(video);
+              this.mediaController.playSong(video);
+              this.mediaController.play();
+              setVideos();
+            }
           }
-        }
-        return val;
-      })})
+          return val;
+        })
+      })
     }
-    this.mediaController.events.subscribe("SetVideos",setVideos);
+    this.mediaController.events.subscribe("SetVideos", setVideos);
     setVideos();
   }
-  render() {     
+  render() {
     return (
       <IonPage>
         <IonHeader>
@@ -66,9 +68,9 @@ export class Home extends React.Component<HomeProps, HomeState> {
               <IonTitle size="large">Cecil Reborn</IonTitle>
             </IonToolbar>
           </IonHeader>
-          <MediaList lineItems = {this.state.videoListItemValues}></MediaList>
-          <div style={{margin:"0 auto"}}>
-            <MediaPlayer/>  
+          <MediaList lineItems={this.state.videoListItemValues}></MediaList>
+          <div style={{ margin: "0 auto" }}>
+            <MediaPlayer />
           </div>
         </IonContent>
       </IonPage>
