@@ -64,7 +64,9 @@ def downloadVid():
             info_dict = ydl.extract_info(video_url)
             # print(info_dict.keys())
             sql = """insert into tblFiles(files, videoID, ext, fileName, title, thumbnail, author)
-            values ('%s', '%s', '%s', '%s', '%s', '%s', '%s')""" %(info_dict["title"], info_dict["id"], video_format, '%s.%s'%(video_id,video_format),info_dict["title"],info_dict["thumbnail"], info_dict["uploader"])
+            values ('%s', '%s', '%s', '%s', '%s', '%s', '%s')""" %(info_dict["title"].replace("'","''"), info_dict["id"].replace("'","''"), video_format.replace("'","''"),
+                                                                    '%s.%s'%(video_id.replace("'","''"),video_format),info_dict["title"].replace("'","''"),info_dict["thumbnail"].replace("'","''"),
+                                                                    info_dict["uploader"].replace("'","''"))
             print(sql)
             cursor = mysql.connection.cursor()
             cursor.execute(sql)
@@ -114,7 +116,8 @@ def getVidInfo():
     
     data = get_table(sql)
 
-    return str(json.loads(data)[1:]) #data is a string with a 2d array. headers are in the first 
+    
+    return data
 
 
 if __name__ == "__main__":

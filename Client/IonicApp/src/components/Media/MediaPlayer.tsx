@@ -1,18 +1,9 @@
-import React, { useState, Suspense } from 'react';
-import { IonIcon, IonGrid, IonRow, IonCol, IonItem, IonRange, IonVirtualScroll, IonContent } from '@ionic/react';
-import ReactDOM from 'react-dom'
-import { arrowBackCircleOutline, arrowForwardCircleOutline, play, } from 'ionicons/icons'
-import {Howl, Howler} from 'howler';
+import * as React from 'react';
+import { IonGrid, IonRow, IonCol, IonRange } from '@ionic/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { MediaService } from '../../services/MediaService'
-import { faCoffee, faPlay, faBackward, faForward, faPause } from '@fortawesome/free-solid-svg-icons'
+import { faPlay, faBackward, faForward, faPause } from '@fortawesome/free-solid-svg-icons'
 import './MediaPlayer.css';
-import { ScrollView } from 'react-native';
-import ListHandler from '../ListHandler/ListHandler';
-import { Video } from '../../models/MediaModels';
 import { MediaController } from '../../controllers/MediaController';
-
-interface MeadiaPlayerProps {}
 
 
 export interface ProgressBarProps {
@@ -88,14 +79,14 @@ class MediaPlayer extends React.Component<MediaPlayerProps, MediaPlayerState> {
                     <IonRow>
                         <IonCol>
                         </IonCol>
-                        <IonCol size="8" sizeLg="4">
-                            <IonRange className="media-progress-bar" value={this.state.progress} onIonChange={this.changeSongProgress} color="secondary" pin={false} />
+                        <IonCol size="8">
+                            <IonRange className="media-progress-bar" value={this.state.progress} color="secondary" pin={false} />
                         </IonCol>
                         <IonCol>
                         </IonCol>
                     </IonRow>
                     <IonRow>
-                        <IonCol sizeLg="3">
+                        <IonCol>
                         </IonCol>
                         <IonCol size="1" style={{"minWidth":"max-content"}}>
                             <FontAwesomeIcon size="2x" onClick={this.mediaController.previousSong} icon={faBackward} />
@@ -106,7 +97,7 @@ class MediaPlayer extends React.Component<MediaPlayerProps, MediaPlayerState> {
                         <IonCol size="1" style={{"minWidth":"max-content"}}>
                             <FontAwesomeIcon size="2x" onClick={this.mediaController.nextSong} icon={ faForward } />
                         </IonCol>
-                        <IonCol sizeLg="3">
+                        <IonCol>
                         </IonCol>
                     </IonRow>
                 </IonGrid>

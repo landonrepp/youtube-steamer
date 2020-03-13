@@ -17,8 +17,8 @@ export class MediaController{
         }
         this.refresh().then(_result=>{
             if(this.Videos.length>0){
-                this.playSong(this.Videos[0]);
-                this.pause();
+                this.playSong(this.Videos[0], false);
+                
             }
         });
         return MediaController._mediaController;
@@ -42,7 +42,11 @@ export class MediaController{
         if(!seek){
             return this.Sounds.seek();
         }
-        let seeknum = this.Sounds.seek(seek,id)
+        let seeknum;
+        if(id)
+            seeknum = this.Sounds.seek(seek,id);
+        else
+            seeknum = this.Sounds.seek(seek);
         this.events.dispatch("SoundSeeked",undefined);
         return seeknum;
     }
@@ -98,7 +102,7 @@ export class MediaController{
         }
     }
     
-    playSong = (video:Video)=>{
+    playSong = (video:Video, playing = true)=>{
         this.Videos.forEach((element,index) => {
             if(element.videoID === video.videoID){
                 this.Videos[index].selected = true;
@@ -114,7 +118,8 @@ export class MediaController{
 
         this.Sounds.unload();
         this.Sounds = this.CreateHowl(video);
-        this.play();
+        if(playing)
+            this.play();
         video.selected = true;
 
     };
