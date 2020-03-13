@@ -62,8 +62,12 @@ def downloadVid():
         video_url = "https://www.youtube.com/watch?v=%s"%video_id
         with youtube_dl.YoutubeDL(ydl_opts) as ydl:
             info_dict = ydl.extract_info(video_url)
-            sql = """insert into tblFiles(files, videoID, ext, fileName, title)
-            values ('%s', '%s', '%s', '%s', '%s')""" %(info_dict["title"], info_dict["id"], video_format, '%s.%s'%(video_id,video_format),info_dict["title"])
+            # print(info_dict.keys())
+            sql = """insert into tblFiles(files, videoID, ext, fileName, title, thumbnail, author)
+            values ('%s', '%s', '%s', '%s', '%s', '%s', '%s')""" %(info_dict["title"].replace("'","''"), info_dict["id"].replace("'","''"), video_format.replace("'","''"),
+                                                                    '%s.%s'%(video_id.replace("'","''"),video_format),info_dict["title"].replace("'","''"),info_dict["thumbnail"].replace("'","''"),
+                                                                    info_dict["uploader"].replace("'","''"))
+            print(sql)
             cursor = mysql.connection.cursor()
             cursor.execute(sql)
             mysql.connection.commit()
@@ -77,7 +81,7 @@ def downloadVid():
     if not range_header:
         with open(video_file_name, 'rb') as mf:
             data = mf.read()
-        return Response(data, 200, mimetype="audio/mp3", direct_passthrough=True)
+        return Response(data, 206, mimetype="audio/mp3", direct_passthrough=True)
 
     m = re.search('(\d+)-(\d*)', range_header)
     
@@ -104,14 +108,15 @@ def getVidInfo():
     video_id = request.args.get('v',None)
     search = request.args.get('s',None)
     if video_id:
-        sql = "select * from tblFiles where filesID = '%s'" % video_id
+        sql = "select * from tblFiles where filesID = '%s' limit 20" % video_id
     elif search:
-        sql = "select * from tblFiles where search like '%{}%'".format(search)
+        sql = "select * from tblFiles where search like '%{}%' limit 20".format(search)
     else:
-        sql = "select * from tblFiles"
+        sql = "select * from tblFiles limit 20"
     
     data = get_table(sql)
 
+    
     return data
 
 

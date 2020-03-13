@@ -1,0 +1,17 @@
+#thumbnail{
+    grid-area:thumbnail;
+    color:blue;
+}
+#title{
+    grid-area:title;
+}
+#subtitle{
+    grid-area:subtitle;
+}
+#grid-container{
+    grid-template-columns: min-content auto;
+    grid-template-rows: 50% 50%;
+    grid-template-areas: 
+        thumbnail title,
+        thumbnail subtitle;
+}
