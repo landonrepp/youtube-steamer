@@ -77,6 +77,7 @@ export class MediaController{
     // todo: learn about events to create a listenable event here for parent compoenents
     set Videos(val){
         this._videos = val;
+        console.log("SetVideos event fired")
         this.events.dispatch("SetVideos",val);
     }
 
@@ -100,6 +101,7 @@ export class MediaController{
                 break;
             }
         }
+        this.events.dispatch("SetSong",null);
     }
     
     playSong = (video:Video, playing = true)=>{

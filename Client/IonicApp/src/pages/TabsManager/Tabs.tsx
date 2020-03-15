@@ -31,13 +31,13 @@ class Tabs extends React.Component<TabsProps, TabsState> {
                     <IonTabButton href="/home" tab="search">
                         <FontAwesomeIcon icon={faSearch}></FontAwesomeIcon>
                         <p style={{ fontSize: "10px", padding: "0 auto", margin: "0 auto" }}>
-                            Search
+                        Library
                         </p>
                     </IonTabButton>
                     <IonTabButton href ="/import" tab="import">
                         <FontAwesomeIcon icon={faBook}></FontAwesomeIcon>
                         <p style={{ fontSize: "10px", padding: "0 auto", margin: "0 auto" }}>
-                            Library
+                            Import
                         </p>
                     </IonTabButton>
                 </IonTabBar>

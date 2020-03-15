@@ -53,6 +53,7 @@ export class Home extends React.Component<HomeProps, HomeState> {
     }
     this.mediaController.events.subscribe("SetVideos", setVideos);
     setVideos();
+    this.mediaController.events.subscribe("SetSong",setVideos);
   }
   render() {
     return (
@@ -68,8 +69,10 @@ export class Home extends React.Component<HomeProps, HomeState> {
               <IonTitle size="large">Cecil Reborn</IonTitle>
             </IonToolbar>
           </IonHeader>
-          <MediaList lineItems={this.state.videoListItemValues}></MediaList>
-          <div style={{ margin: "0 auto" }}>
+          <div style={{height:"70%", overflow:"auto"}}>
+            <MediaList lineItems={this.state.videoListItemValues}></MediaList>
+          </div>
+          <div style={{ margin: "0 auto", height:"20%" }}>
             <MediaPlayer />
           </div>
         </IonContent>

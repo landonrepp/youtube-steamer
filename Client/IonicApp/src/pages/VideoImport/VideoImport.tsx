@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { Component } from 'react';
-import { IonInput, IonButton, IonPage, IonGrid, IonRow, IonCol, IonLabel } from '@ionic/react';
+import { IonInput, IonButton, IonPage, IonGrid, IonRow, IonCol, IonLabel, IonLoading } from '@ionic/react';
 import { MediaService } from '../../services/MediaService';
 import {GETURL} from '../../Constants'
 import { url } from 'inspector';
 import { hostname } from 'os';
+import { MediaController } from '../../controllers/MediaController'
 
 export interface VideoImportProps {
     initialUrl?:string
@@ -12,7 +13,8 @@ export interface VideoImportProps {
 
 export interface VideoImportState {
     urlVal:string,
-    urlInvalid:boolean
+    urlInvalid:boolean,
+    loading:boolean
 }
 
 class VideoImport extends React.Component<VideoImportProps, VideoImportState> {
@@ -21,11 +23,14 @@ class VideoImport extends React.Component<VideoImportProps, VideoImportState> {
         
         this.state = {
             urlVal: this.props.initialUrl||"",
-            urlInvalid:false
+            urlInvalid:false,
+            loading:false
         };
     }
     handleChange(event:any){
-        this.setState({urlVal:event.target.value})
+        this.setState({urlVal:event.target.value});
+        let x = new MediaController();
+        x.refresh()
     }
     importVideo(){
         try{
@@ -47,12 +52,19 @@ class VideoImport extends React.Component<VideoImportProps, VideoImportState> {
                 throw "invalid url"
             }
             else{
-                this.setState({urlInvalid:false});
+                this.setState({urlInvalid:false, loading:true});
+                var oReq = new XMLHttpRequest();
+                oReq.addEventListener("load", ()=>{
+                    this.setState({loading:false});
+                    
+                });
+                oReq.open("GET", `${GETURL}/youtube?v=${v}`);
+                oReq.send();
             }
             console.log(v);
         }
         catch(ex){
-            this.setState({urlInvalid:true});
+            this.setState({urlInvalid:true, loading:false});
         }
         // let videoUrl = `${GETURL}/youtube?v=${video.videoID}`;
 
@@ -75,6 +87,11 @@ class VideoImport extends React.Component<VideoImportProps, VideoImportState> {
                         <IonLabel style={{ margin: "0 auto", display:this.state.urlInvalid?"block":"none", color:"red" }}>
                             An error has occured. Please check your url.
                         </IonLabel>
+                        <IonLoading
+                            isOpen={this.state.loading}
+                            message={'Importing...'}
+                            duration={5000}
+                        />
                     </IonRow>
                 </IonGrid>
             </IonPage>

@@ -38,6 +38,7 @@ class MediaPlayer extends React.Component<MediaPlayerProps, MediaPlayerState> {
         }
     };
     changeSongProgress = (e:any)=>{
+        console.log(e.target.class)
         let val = (e.target as any).value as number;
         if(val && val != this.state.progress){
             this.setState({progress:val});
@@ -76,7 +77,7 @@ class MediaPlayer extends React.Component<MediaPlayerProps, MediaPlayerState> {
         const element = (
             <div onMouseUp={this.changeSongProgress}>
                 <IonGrid>
-                    <IonRow>
+                    <IonRow style={{marginBottom:"0"}}>
                         <IonCol>
                         </IonCol>
                         <IonCol size="8">
@@ -85,7 +86,7 @@ class MediaPlayer extends React.Component<MediaPlayerProps, MediaPlayerState> {
                         <IonCol>
                         </IonCol>
                     </IonRow>
-                    <IonRow>
+                    <IonRow style={{marginTop:"0"}}>
                         <IonCol>
                         </IonCol>
                         <IonCol size="1" style={{"minWidth":"max-content"}}>
@@ -100,6 +101,12 @@ class MediaPlayer extends React.Component<MediaPlayerProps, MediaPlayerState> {
                         <IonCol>
                         </IonCol>
                     </IonRow>
+                    {/* <IonRow>
+                        <IonCol></IonCol>
+                        <IonCol size="4">
+                            <IonRange value={this.mediaController.Sounds.volume()}></IonRange>
+                        </IonCol>
+                    </IonRow> */}
                 </IonGrid>
             </div>
         );
