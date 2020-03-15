@@ -15,7 +15,9 @@ class ProfilePage extends React.Component<ProfilePageProps, ProfilePageState> {
         this.state = { };
     }
     render() { 
-        return (  );
+        return (
+            <div></div>
+        );
     }
 }
  

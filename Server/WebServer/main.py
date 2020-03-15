@@ -111,11 +111,11 @@ def getVidInfo():
     video_id = request.args.get('v',None)
     search = request.args.get('s',None)
     if video_id:
-        sql = "select * from tblFiles where filesID = '%s' limit 20" % video_id
+        sql = "select * from tblFiles where filesID = '%s' order by filesID desc limit 50" % video_id
     elif search:
-        sql = "select * from tblFiles where search like '%{}%' limit 20".format(search)
+        sql = "select * from tblFiles where title like '%{}%' order by filesID desc limit 50".format(search)
     else:
-        sql = "select * from tblFiles limit 20"
+        sql = "select * from tblFiles order by filesID desc limit 50"
     
     data = get_table(sql)
 

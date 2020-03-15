@@ -21,9 +21,12 @@ export class MediaService {
         return formatted;
     }
 
-    static getVideoInformation: () => any = ()=>{
-        console.log(GETURL+"/getvideo");
-        var promise = fetch(GETURL+"/getvideo")
+    static getVideoInformation: (searchString?:string) => any = (searchString?:string)=>{
+        let baseUrl = GETURL+"/getvideo";
+        if(searchString){
+            baseUrl += `?s=${searchString}`;
+        }
+        var promise = fetch(baseUrl)
         .then((result)=>{
             return result.json()
             .then(result=>{

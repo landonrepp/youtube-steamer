@@ -50,8 +50,8 @@ export class MediaController{
         this.events.dispatch("SoundSeeked",undefined);
         return seeknum;
     }
-    refresh = async()=>{
-        let videoInformation = await MediaService.getVideoInformation();
+    refresh = async(searchString?:string)=>{
+        let videoInformation = await MediaService.getVideoInformation(searchString);
         this.Videos = videoInformation;
     };
 

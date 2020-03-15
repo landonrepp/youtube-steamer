@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonInput } from '@ionic/react';
 import React from 'react';
 import MediaPlayer from '../components/Media/MediaPlayer';
 import './Home.css';
@@ -28,32 +28,36 @@ export class Home extends React.Component<HomeProps, HomeState> {
       videoListItemValues: []
     }
   }
+  setVideos = () => {
+    this.setState({
+      videoListItemValues: this.mediaController.Videos.map(element => {
+        let val: MediaListItemValues = {
+          selected: element.selected,
+          title: element.title,
+          subtitle: element.author,
+          image: element.thumbnail,
+          onSelect: () => {
+            let video = element;
+            console.log(video);
+            this.mediaController.playSong(video);
+            this.mediaController.play();
+            this.setVideos();
+          }
+        }
+        return val;
+      })
+    })
+  }
   mediaController = new MediaController();
   componentDidMount = () => {
     console.log("home mounted")
-    let setVideos = () => {
-      this.setState({
-        videoListItemValues: this.mediaController.Videos.map(element => {
-          let val: MediaListItemValues = {
-            selected: element.selected,
-            title: element.title,
-            subtitle: element.author,
-            image: element.thumbnail,
-            onSelect: () => {
-              let video = element;
-              console.log(video);
-              this.mediaController.playSong(video);
-              this.mediaController.play();
-              setVideos();
-            }
-          }
-          return val;
-        })
-      })
-    }
-    this.mediaController.events.subscribe("SetVideos", setVideos);
-    setVideos();
-    this.mediaController.events.subscribe("SetSong",setVideos);
+    this.mediaController.events.subscribe("SetVideos", this.setVideos);
+    this.setVideos();
+    this.mediaController.events.subscribe("SetSong",this.setVideos);
+  }
+  search(e:any){
+    console.log(e.target.value)
+    this.mediaController.refresh(e.target.value);
   }
   render() {
     return (
@@ -63,16 +67,19 @@ export class Home extends React.Component<HomeProps, HomeState> {
             <IonTitle>Cecil Reborn</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonContent>
+        <IonContent style={{overflow:"none"}}>
           <IonHeader collapse="condense">
             <IonToolbar>
               <IonTitle size="large">Cecil Reborn</IonTitle>
             </IonToolbar>
           </IonHeader>
-          <div style={{height:"70%", overflow:"auto"}}>
+          <div style={{height:"5%"}}>
+            Search: <input onChange= {this.search.bind(this)}></input>
+          </div>
+          <div style={{height:"60%", overflow:"auto"}}>
             <MediaList lineItems={this.state.videoListItemValues}></MediaList>
           </div>
-          <div style={{ margin: "0 auto", height:"20%" }}>
+          <div style={{ margin: "0 auto", height:"15%" }}>
             <MediaPlayer />
           </div>
         </IonContent>
