@@ -61,10 +61,12 @@ export class MediaController{
         }
     }
 
-    CreateHowl = (video:Video)=>{
-        let videoUrl = `${GETURL}/youtube?v=${video.videoID}&f=${video.ext}`;
+    CreateHowl = async (video:Video)=>{
+        // let videoUrl = `${GETURL}/youtube?v=${video.videoID}&f=${video.ext}`;
+        const videoPlayer = await MediaService.getVideoPlayerStreamer(video);
+        
         return new Howl({
-            src:[videoUrl], format:"mp3", volume:1, html5: true,
+            src:[videoPlayer.url], format:videoPlayer.extention, volume:1, html5: true,
             onend: (id)=>{
                 this.nextSong();
             }
@@ -77,7 +79,8 @@ export class MediaController{
     // todo: learn about events to create a listenable event here for parent compoenents
     set Videos(val){
         this._videos = val;
-        console.log("SetVideos event fired")
+        console.log("SetVideos event fired");
+        // console.log(val);
         this.events.dispatch("SetVideos",val);
     }
 
@@ -97,14 +100,16 @@ export class MediaController{
                 let idx = (i+numOfSongs)%len;
                 if(idx<0) idx = this.Videos.length+idx;
                 selectedVideo = this.Videos[idx];
-                this.playSong(selectedVideo);
+                this.playSong(selectedVideo)
+                .then(()=>{
+                    this.events.dispatch("SetSong",null);
+                });
                 break;
             }
         }
-        this.events.dispatch("SetSong",null);
     }
     
-    playSong = (video:Video, playing = true)=>{
+    playSong = async (video:Video, playing = true)=>{
         this.Videos.forEach((element,index) => {
             if(element.videoID === video.videoID){
                 this.Videos[index].selected = true;
@@ -114,12 +119,12 @@ export class MediaController{
             }
         });
         this.songSelected = true;
-        let videoID = video.videoID;
-        let ext = video.ext;
         
-
+        this.Sounds.stop();
         this.Sounds.unload();
-        this.Sounds = this.CreateHowl(video);
+        console.log("sound unloaded");
+        console.log(this.Sounds.playing);
+        this.Sounds = await this.CreateHowl(video);
         if(playing)
             this.play();
         video.selected = true;

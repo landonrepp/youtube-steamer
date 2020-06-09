@@ -1,2 +1,4 @@
 Client/IonicApp/node_modules/*
+Client/IonicApp/build/*
+Client/IonicApp/android/*
 Server/WebServer/Server/Videos/*

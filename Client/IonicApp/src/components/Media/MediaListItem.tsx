@@ -33,7 +33,7 @@ class MediaListItem extends React.Component<MediaListItemProps, MediaListItemSta
                                 {this.props.mediaListItemValues.title}
                             </IonLabel>
                             <p style={{fontSize:"10px"}}>
-                                By - {this.props.mediaListItemValues.subtitle}
+                                {this.props.mediaListItemValues.subtitle}
                             </p>
                         </IonCol>
                         <IonCol>

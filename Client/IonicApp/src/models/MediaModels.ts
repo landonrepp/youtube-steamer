@@ -1,6 +1,5 @@
 export interface Video {
     selected: boolean,
-    ext: string,
     title: string,
     videoID: string,
     thumbnail: string,
@@ -14,3 +13,7 @@ export interface MediaListItemValues {
     onSelect?: () => any
 
 };
+export interface VideoStream{
+    url:string,
+    extention:string
+}

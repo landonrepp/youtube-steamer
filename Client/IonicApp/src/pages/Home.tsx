@@ -1,4 +1,4 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonInput } from '@ionic/react';
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonInput, IonSearchbar } from '@ionic/react';
 import React from 'react';
 import MediaPlayer from '../components/Media/MediaPlayer';
 import './Home.css';
@@ -40,7 +40,6 @@ export class Home extends React.Component<HomeProps, HomeState> {
             let video = element;
             console.log(video);
             this.mediaController.playSong(video);
-            this.mediaController.play();
             this.setVideos();
           }
         }
@@ -73,8 +72,8 @@ export class Home extends React.Component<HomeProps, HomeState> {
               <IonTitle size="large">Cecil Reborn</IonTitle>
             </IonToolbar>
           </IonHeader>
-          <div style={{height:"5%"}}>
-            Search: <input onChange= {this.search.bind(this)}></input>
+          <div style={{display:'block'}}>
+            <IonSearchbar id="searchbar" debounce = {400} onIonChange= {this.search.bind(this)}></IonSearchbar>
           </div>
           <div style={{height:"60%", overflow:"auto"}}>
             <MediaList lineItems={this.state.videoListItemValues}></MediaList>
