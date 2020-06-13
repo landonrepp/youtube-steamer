@@ -105,13 +105,10 @@ class MediaPlayer extends React.Component<MediaPlayerProps, MediaPlayerState> {
                         </IonRow>
                     </div>
                     <IonRow>
-                        <IonCol></IonCol>
                         <IonCol size="4">
-                            <IonText>
-                                Volume: 
-                            </IonText>
                             <IonRange onMouseUp={(e)=>this.mediaController.Volume = ((e.target as any).value as number)/100} value={this.mediaController.Volume * 100}></IonRange>
                         </IonCol>
+                        <IonCol></IonCol>
                     </IonRow>
                 </IonGrid>
         );

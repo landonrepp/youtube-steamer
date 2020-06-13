@@ -75,7 +75,7 @@ export class Home extends React.Component<HomeProps, HomeState> {
           <div style={{display:'block'}}>
             <IonSearchbar id="searchbar" debounce = {400} onIonChange= {this.search.bind(this)}></IonSearchbar>
           </div>
-          <div style={{height:"60%", overflow:"auto"}}>
+          <div style={{height:"calc(100% - 250px)", overflow:"auto"}}>
             <MediaList lineItems={this.state.videoListItemValues}></MediaList>
           </div>
           <div>

@@ -19,7 +19,7 @@ def search(searchKey, tries = 0):
         # return str(raw_videos)
         return [
                 {
-                        'thumbnail': raw_video.find('img').get('src',''),
+                        'thumbnail': raw_video.find('img').get('data-thumb',None) if raw_video.find('img').get('data-thumb',None) else raw_video.find('img').get('src','None'),
                         'videoID' : get_video_id(raw_video.find('a',attrs={'class':'yt-uix-tile-link'}).get('href','')),
                         'title' : raw_video.find('a',attrs={'class':'yt-uix-tile-link'}).text,
                         'author' : raw_video.find('div',attrs={'class':'yt-lockup-byline'}).text
