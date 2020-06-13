@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IonGrid, IonRow, IonCol, IonRange } from '@ionic/react';
+import { IonGrid, IonRow, IonCol, IonRange, IonText } from '@ionic/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faBackward, faForward, faPause } from '@fortawesome/free-solid-svg-icons'
 import './MediaPlayer.css';
@@ -74,41 +74,46 @@ class MediaPlayer extends React.Component<MediaPlayerProps, MediaPlayerState> {
     };
 
     render() { 
+        console.log(this.mediaController.Volume);
         const element = (
-            <div onMouseUp={this.changeSongProgress}>
+            
                 <IonGrid>
-                    <IonRow style={{marginBottom:"0"}}>
-                        <IonCol>
-                        </IonCol>
-                        <IonCol size="8">
-                            <IonRange className="media-progress-bar" value={this.state.progress} color="secondary" pin={false} />
-                        </IonCol>
-                        <IonCol>
-                        </IonCol>
-                    </IonRow>
-                    <IonRow style={{marginTop:"0"}}>
-                        <IonCol>
-                        </IonCol>
-                        <IonCol size="1" style={{"minWidth":"max-content"}}>
-                            <FontAwesomeIcon size="2x" onClick={this.mediaController.previousSong} icon={faBackward} />
-                        </IonCol>
-                        <IonCol size="1" style={{"minWidth":"max-content"}}>
-                            <FontAwesomeIcon className="pause-play" onClick={this.togglePlaying} size="2x" icon={this.state.playing? faPause:faPlay} />
-                        </IonCol>
-                        <IonCol size="1" style={{"minWidth":"max-content"}}>
-                            <FontAwesomeIcon size="2x" onClick={this.mediaController.nextSong} icon={ faForward } />
-                        </IonCol>
-                        <IonCol>
-                        </IonCol>
-                    </IonRow>
-                    {/* <IonRow>
+                    <div onMouseUp={this.changeSongProgress}>
+                        <IonRow style={{marginBottom:"0"}}>
+                            <IonCol>
+                            </IonCol>
+                            <IonCol size="8">
+                                <IonRange className="media-progress-bar" value={this.state.progress} color="secondary" pin={false} />
+                            </IonCol>
+                            <IonCol>
+                            </IonCol>
+                        </IonRow>
+                        <IonRow style={{marginTop:"0"}}>
+                            <IonCol>
+                            </IonCol>
+                            <IonCol size="1" style={{"minWidth":"max-content"}}>
+                                <FontAwesomeIcon size="2x" onClick={this.mediaController.previousSong} icon={faBackward} />
+                            </IonCol>
+                            <IonCol size="1" style={{"minWidth":"max-content"}}>
+                                <FontAwesomeIcon className="pause-play" onClick={this.togglePlaying} size="2x" icon={this.state.playing? faPause:faPlay} />
+                            </IonCol>
+                            <IonCol size="1" style={{"minWidth":"max-content"}}>
+                                <FontAwesomeIcon size="2x" onClick={this.mediaController.nextSong} icon={ faForward } />
+                            </IonCol>
+                            <IonCol>
+                            </IonCol>
+                        </IonRow>
+                    </div>
+                    <IonRow>
                         <IonCol></IonCol>
                         <IonCol size="4">
-                            <IonRange value={this.mediaController.Sounds.volume()}></IonRange>
+                            <IonText>
+                                Volume: 
+                            </IonText>
+                            <IonRange onMouseUp={(e)=>this.mediaController.Volume = ((e.target as any).value as number)/100} value={this.mediaController.Volume * 100}></IonRange>
                         </IonCol>
-                    </IonRow> */}
+                    </IonRow>
                 </IonGrid>
-            </div>
         );
         return element;
     }

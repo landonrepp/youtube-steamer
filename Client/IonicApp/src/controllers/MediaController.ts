@@ -7,8 +7,24 @@ export class MediaController{
     events = new EventEmitter();
     private _videos: Video[] = [];
     private _playing:boolean = false;
+    private _selectedVideo : null | Video = null;
+    private _volume = 1;
     Sounds = new Howl({src: [""], format:["mp3"],html5: true});
     songSelected = false;
+    
+    get SelectedVideo(){
+        return this._selectedVideo;
+    }
+    set SelectedVideo(value){
+        this._selectedVideo = value;
+    }
+    get Volume(){
+        return this.Sounds.volume();
+    }
+    set Volume(val:number){
+        this._volume = val;
+        this.Sounds.volume(val); 
+    }
     private static _mediaController:MediaController;
     //mediacontroller should be a singleton to allow music to be paused and played from multiple components
     constructor(){
@@ -18,7 +34,6 @@ export class MediaController{
         this.refresh().then(_result=>{
             if(this.Videos.length>0){
                 this.playSong(this.Videos[0], false);
-                
             }
         });
         return MediaController._mediaController;
@@ -66,7 +81,7 @@ export class MediaController{
         const videoPlayer = await MediaService.getVideoPlayerStreamer(video);
         
         return new Howl({
-            src:[videoPlayer.url], format:videoPlayer.extention, volume:1, html5: true,
+            src:[videoPlayer.url], format:videoPlayer.extention, volume:this._volume, html5: true,
             onend: (id)=>{
                 this.nextSong();
             }
@@ -110,6 +125,8 @@ export class MediaController{
     }
     
     playSong = async (video:Video, playing = true)=>{
+        this.SelectedVideo = video;
+        
         this.Videos.forEach((element,index) => {
             if(element.videoID === video.videoID){
                 this.Videos[index].selected = true;
@@ -128,6 +145,5 @@ export class MediaController{
         if(playing)
             this.play();
         video.selected = true;
-
     };
 }

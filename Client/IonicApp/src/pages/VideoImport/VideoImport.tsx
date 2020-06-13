@@ -90,7 +90,6 @@ class VideoImport extends React.Component<VideoImportProps, VideoImportState> {
                         <IonLoading
                             isOpen={this.state.loading}
                             message={'Importing...'}
-                            duration={5000}
                         />
                     </IonRow>
                 </IonGrid>

@@ -1,11 +1,11 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonInput, IonSearchbar } from '@ionic/react';
 import React from 'react';
-import MediaPlayer from '../components/Media/MediaPlayer';
-import './Home.css';
-import MediaListItem from '../components/Media/MediaListItem';
-import MediaList from '../components/Media/MediaList';
-import { MediaListItemValues, Video } from '../models/MediaModels'
-import { MediaController } from '../controllers/MediaController'
+import MediaPlayer from '../../components/Media/MediaPlayer';
+import './Library.css';
+import MediaListItem from '../../components/Media/MediaListItem';
+import MediaList from '../../components/Media/MediaList';
+import { MediaListItemValues, Video } from '../../models/MediaModels'
+import { MediaController } from '../../controllers/MediaController'
 import { verify } from 'crypto';
 import { resolve } from 'dns';
 import { rejects } from 'assert';
@@ -78,7 +78,7 @@ export class Home extends React.Component<HomeProps, HomeState> {
           <div style={{height:"60%", overflow:"auto"}}>
             <MediaList lineItems={this.state.videoListItemValues}></MediaList>
           </div>
-          <div style={{ margin: "0 auto", height:"15%" }}>
+          <div>
             <MediaPlayer />
           </div>
         </IonContent>
