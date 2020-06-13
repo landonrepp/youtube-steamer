@@ -7,8 +7,24 @@ export class MediaController{
     events = new EventEmitter();
     private _videos: Video[] = [];
     private _playing:boolean = false;
+    private _selectedVideo : null | Video = null;
+    private _volume = 1;
     Sounds = new Howl({src: [""], format:["mp3"],html5: true});
     songSelected = false;
+    
+    get SelectedVideo(){
+        return this._selectedVideo;
+    }
+    set SelectedVideo(value){
+        this._selectedVideo = value;
+    }
+    get Volume(){
+        return this.Sounds.volume();
+    }
+    set Volume(val:number){
+        this._volume = val;
+        this.Sounds.volume(val); 
+    }
     private static _mediaController:MediaController;
     //mediacontroller should be a singleton to allow music to be paused and played from multiple components
     constructor(){
@@ -18,7 +34,6 @@ export class MediaController{
         this.refresh().then(_result=>{
             if(this.Videos.length>0){
                 this.playSong(this.Videos[0], false);
-                
             }
         });
         return MediaController._mediaController;
@@ -50,8 +65,8 @@ export class MediaController{
         this.events.dispatch("SoundSeeked",undefined);
         return seeknum;
     }
-    refresh = async()=>{
-        let videoInformation = await MediaService.getVideoInformation();
+    refresh = async(searchString?:string)=>{
+        let videoInformation = await MediaService.getVideoInformation(searchString);
         this.Videos = videoInformation;
     };
 
@@ -61,10 +76,12 @@ export class MediaController{
         }
     }
 
-    CreateHowl = (video:Video)=>{
-        let videoUrl = `${GETURL}/youtube?v=${video.videoID}&f=${video.ext}`;
+    CreateHowl = async (video:Video)=>{
+        // let videoUrl = `${GETURL}/youtube?v=${video.videoID}&f=${video.ext}`;
+        const videoPlayer = await MediaService.getVideoPlayerStreamer(video);
+        
         return new Howl({
-            src:[videoUrl], format:"mp3", volume:1, html5: true,
+            src:[videoPlayer.url], format:videoPlayer.extention, volume:this._volume, html5: true,
             onend: (id)=>{
                 this.nextSong();
             }
@@ -77,6 +94,8 @@ export class MediaController{
     // todo: learn about events to create a listenable event here for parent compoenents
     set Videos(val){
         this._videos = val;
+        console.log("SetVideos event fired");
+        // console.log(val);
         this.events.dispatch("SetVideos",val);
     }
 
@@ -96,13 +115,18 @@ export class MediaController{
                 let idx = (i+numOfSongs)%len;
                 if(idx<0) idx = this.Videos.length+idx;
                 selectedVideo = this.Videos[idx];
-                this.playSong(selectedVideo);
+                this.playSong(selectedVideo)
+                .then(()=>{
+                    this.events.dispatch("SetSong",null);
+                });
                 break;
             }
         }
     }
     
-    playSong = (video:Video, playing = true)=>{
+    playSong = async (video:Video, playing = true)=>{
+        this.SelectedVideo = video;
+        
         this.Videos.forEach((element,index) => {
             if(element.videoID === video.videoID){
                 this.Videos[index].selected = true;
@@ -112,15 +136,14 @@ export class MediaController{
             }
         });
         this.songSelected = true;
-        let videoID = video.videoID;
-        let ext = video.ext;
         
-
+        this.Sounds.stop();
         this.Sounds.unload();
-        this.Sounds = this.CreateHowl(video);
+        console.log("sound unloaded");
+        console.log(this.Sounds.playing);
+        this.Sounds = await this.CreateHowl(video);
         if(playing)
             this.play();
         video.selected = true;
-
     };
 }

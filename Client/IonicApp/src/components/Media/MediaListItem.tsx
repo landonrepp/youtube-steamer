@@ -17,7 +17,10 @@ class MediaListItem extends React.Component<MediaListItemProps, MediaListItemSta
     }
     render() { 
         return ( 
-            <IonItem button color="primary" onSelect = {this.props.mediaListItemValues.onSelect}>
+            <IonItem button color={this.props.mediaListItemValues.selected?"primary":"white"} onClick = {()=>{
+                console.log("got here");
+                (this.props.mediaListItemValues.onSelect || function (){})()
+            }}>
                 <IonGrid>
                     <IonRow>
                         <IonCol size="2">
@@ -25,13 +28,13 @@ class MediaListItem extends React.Component<MediaListItemProps, MediaListItemSta
                                 <IonImg src={this.props.mediaListItemValues.image} />
                             </IonThumbnail>
                         </IonCol>
-                        <IonCol>
+                        <IonCol size="10">
                             <IonLabel>
                                 {this.props.mediaListItemValues.title}
                             </IonLabel>
-                            <IonLabel>
+                            <p style={{fontSize:"10px"}}>
                                 {this.props.mediaListItemValues.subtitle}
-                            </IonLabel>
+                            </p>
                         </IonCol>
                         <IonCol>
 

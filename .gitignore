@@ -1,2 +1,5 @@
 Client/IonicApp/node_modules/*
-Server/WebServer/Server/Videos/*
+Client/IonicApp/build/*
+Client/IonicApp/android/*
+Server/WebServer/youtube_streamer_env/*
+Server/WebServer/constants.py
