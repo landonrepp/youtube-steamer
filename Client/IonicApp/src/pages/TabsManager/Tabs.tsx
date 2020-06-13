@@ -1,11 +1,9 @@
-import { IonTab, IonTabs, IonTabBar, IonTabButton, IonIcon, IonRouterOutlet, IonLabel, IonContent } from "@ionic/react";
+import { faBook, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IonRouterOutlet, IonTabBar, IonTabButton, IonTabs } from "@ionic/react";
 import * as React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBook, faSearch } from '@fortawesome/free-solid-svg-icons'
-import { Route, Redirect } from "react-router";
+import { Redirect, Route } from "react-router";
 import Library from "../Library/Library";
-import MediaPlayer from "../../components/Media/MediaPlayer";
-import BasePage from "../BasePage/BasePage";
 import VideoImport from "../VideoImport/VideoImport";
 
 export interface TabsProps {

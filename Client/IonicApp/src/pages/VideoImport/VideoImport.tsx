@@ -1,11 +1,7 @@
+import { IonButton, IonGrid, IonLabel, IonLoading, IonPage, IonRow } from '@ionic/react';
 import * as React from 'react';
-import { Component } from 'react';
-import { IonInput, IonButton, IonPage, IonGrid, IonRow, IonCol, IonLabel, IonLoading } from '@ionic/react';
-import { MediaService } from '../../services/MediaService';
-import {GETURL} from '../../Constants'
-import { url } from 'inspector';
-import { hostname } from 'os';
-import { MediaController } from '../../controllers/MediaController'
+import { GETURL } from '../../Constants';
+import { MediaController } from '../../controllers/MediaController';
 
 export interface VideoImportProps {
     initialUrl?:string

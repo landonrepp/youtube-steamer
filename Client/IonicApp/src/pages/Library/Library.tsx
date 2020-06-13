@@ -4,7 +4,7 @@ import MediaPlayer from '../../components/Media/MediaPlayer';
 import './Library.css';
 import MediaListItem from '../../components/Media/MediaListItem';
 import MediaList from '../../components/Media/MediaList';
-import { MediaListItemValues, Video } from '../../models/MediaModels'
+import { MediaListItemValues} from '../../models/MediaModels'
 import { MediaController } from '../../controllers/MediaController'
 import { verify } from 'crypto';
 import { resolve } from 'dns';

@@ -36,5 +36,5 @@ def youtube():
 # TODO: set this up to not use the youtube api. it's too limited on daily requests. maybe web scraping?
 @app.route('/video')
 def video():
-    search_key = request.args.get('s','')
-    return SearchYoutube.search(search_key)
+    search_key = request.args.get('s','music')
+    return jsonify(SearchYoutube.search(search_key))

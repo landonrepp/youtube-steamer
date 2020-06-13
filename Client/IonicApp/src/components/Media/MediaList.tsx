@@ -1,7 +1,5 @@
 import * as React from 'react';
-import { Component } from 'react';
-import {MediaListItemValues} from '../../models/MediaModels'
-import { IonItem } from '@ionic/react';
+import { MediaListItemValues } from '../../models/MediaModels';
 import MediaListItem from './MediaListItem';
 
 export interface MediaListProps {

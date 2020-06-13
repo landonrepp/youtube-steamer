@@ -1,9 +1,9 @@
+import { faBackward, faForward, faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IonCol, IonGrid, IonRange, IonRow, IonText } from '@ionic/react';
 import * as React from 'react';
-import { IonGrid, IonRow, IonCol, IonRange, IonText } from '@ionic/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlay, faBackward, faForward, faPause } from '@fortawesome/free-solid-svg-icons'
-import './MediaPlayer.css';
 import { MediaController } from '../../controllers/MediaController';
+import './MediaPlayer.css';
 
 
 export interface ProgressBarProps {
