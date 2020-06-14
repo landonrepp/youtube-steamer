@@ -1,0 +1,21 @@
+[2020-06-14 02:55:58 -0500] [25608] [INFO] Starting gunicorn 20.0.4
+[2020-06-14 02:55:58 -0500] [25608] [INFO] Listening at: http://0.0.0.0:5000 (25608)
+[2020-06-14 02:55:58 -0500] [25608] [INFO] Using worker: sync
+[2020-06-14 02:55:58 -0500] [25613] [INFO] Booting worker with pid: 25613
+[2020-06-14 02:56:44 -0500] [25608] [INFO] Handling signal: int
+[2020-06-14 02:56:45 -0500] [25613] [INFO] Worker exiting (pid: 25613)
+[2020-06-14 02:56:45 -0500] [25608] [INFO] Shutting down: Master
+[2020-06-14 03:20:23 -0500] [31147] [INFO] Starting gunicorn 20.0.4
+[2020-06-14 03:20:23 -0500] [31147] [INFO] Listening at: http://0.0.0.0:5000 (31147)
+[2020-06-14 03:20:23 -0500] [31147] [INFO] Using worker: sync
+[2020-06-14 03:20:23 -0500] [31150] [INFO] Booting worker with pid: 31150
+[2020-06-14 03:20:26 -0500] [31147] [INFO] Handling signal: int
+[2020-06-14 03:20:26 -0500] [31150] [INFO] Worker exiting (pid: 31150)
+[2020-06-14 03:20:27 -0500] [31147] [INFO] Shutting down: Master
+[2020-06-14 03:21:34 -0500] [32360] [INFO] Starting gunicorn 20.0.4
+[2020-06-14 03:21:34 -0500] [32360] [INFO] Listening at: http://0.0.0.0:5000 (32360)
+[2020-06-14 03:21:34 -0500] [32360] [INFO] Using worker: sync
+[2020-06-14 03:21:34 -0500] [32364] [INFO] Booting worker with pid: 32364
+[2020-06-14 03:21:37 -0500] [32360] [INFO] Handling signal: int
+[2020-06-14 03:21:37 -0500] [32364] [INFO] Worker exiting (pid: 32364)
+[2020-06-14 03:21:38 -0500] [32360] [INFO] Shutting down: Master

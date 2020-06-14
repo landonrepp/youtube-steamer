@@ -24,7 +24,6 @@ def youtube():
         return Response(404,"bad bad video id")
     
     video_url = "https://www.youtube.com/watch?v=%s"%video_id
-    
     video = pafy.new(video_url)
     bestaudio = video.getbestaudio()
     
