@@ -1,1 +1,1 @@
-export const GETURL = "http://localhost:5000";
+export const GETURL = "http://stream.landonrepp.com";
