@@ -9,6 +9,8 @@ RUN apk add --no-cache --update \
     python3 python3-dev gcc \
     gfortran musl-dev
 
+RUN apk add git
+
 RUN pip install --upgrade pip
 RUN python -m venv youtube_streamer_env
 RUN source youtube_streamer_env/bin/activate
