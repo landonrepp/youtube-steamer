@@ -1,3 +1,6 @@
+# import os
+# os.environ["PAFY_BACKEND"] = "internal"
+
 from flask import Flask, Response, jsonify
 from flask_cors import CORS
 from flask import request
@@ -5,6 +8,8 @@ import pafy
 # from youtube_api import YouTubeDataAPI
 import constants
 import SearchYoutube
+
+
 
 app = Flask(__name__)
 #fully opened cors for now. i eventually want to only open it to my app url
@@ -24,7 +29,8 @@ def youtube():
         return Response(404,"bad bad video id")
     
     video_url = "https://www.youtube.com/watch?v=%s"%video_id
-    video = pafy.new(video_url)
+    video = pafy.new(video_url, basic=False, gdata=False)
+
     bestaudio = video.getbestaudio()
     
     return jsonify({
@@ -32,7 +38,7 @@ def youtube():
         'ext':bestaudio.extension
     })
 
-# TODO: set this up to not use the youtube api. it's too limited on daily requests. maybe web scraping?
+
 @app.route('/video')
 def video():
     search_key = request.args.get('s','music')
