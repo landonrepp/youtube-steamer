@@ -17,7 +17,8 @@ RUN python -m venv youtube_streamer_env
 RUN source youtube_streamer_env/bin/activate
 RUN youtube_streamer_env/bin/pip install -r requirements.txt
 RUN youtube_streamer_env/bin/pip install gunicorn
-RUN youtube_streamer_env/bin/pip uninstall paffy
+# RUN youtube_streamer_env/bin/pip install paffy
+# RUN youtube_streamer_env/bin/pip uninstall paffy
 RUN youtube_streamer_env/bin/pip install git+https://github.com/landonrepp/pafy.git@bugfix-Ytdl.Pafy._fetch_basic-crashes-if-thumbnail-doesnt-exist#egg=pafy
 
 
