@@ -1,9 +1,8 @@
 beautifulsoup4==4.9.1
 Flask==1.1.2
 Flask-Cors==3.0.8
-# pafy==0.5.5
+pafy==0.5.5
 requests==2.23.0
 urllib3==1.25.9
 youtube-dl==2020.6.6
 html5lib==1.0.1
-git+https://github.com/landonrepp/pafy.git@bugfix-Ytdl.Pafy._fetch_basic-crashes-if-thumbnail-doesnt-exist#egg=pafy

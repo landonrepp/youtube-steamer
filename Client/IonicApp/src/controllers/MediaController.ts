@@ -3,7 +3,10 @@ import { GETURL } from '../Constants';
 import { MediaService } from '../services/MediaService';
 import {Howl, Howler} from 'howler';
 import {EventEmitter} from './EventEmitter';
+import { BackgroundMode } from '@ionic-native/background-mode/ngx';
+
 export class MediaController{
+    
     events = new EventEmitter();
     private _videos: Video[] = [];
     private _playing:boolean = false;
@@ -26,8 +29,24 @@ export class MediaController{
         this.Sounds.volume(val); 
     }
     private static _mediaController:MediaController;
+    private backgroundMode: BackgroundMode;
     //mediacontroller should be a singleton to allow music to be paused and played from multiple components
     constructor(){
+        this.backgroundMode = new BackgroundMode();
+        // this.backgroundMode.enable();
+        
+        // this.backgroundMode.disableWebViewOptimizations();
+        // this.backgroundMode.disableBatteryOptimizations();
+
+        this.backgroundMode = new BackgroundMode();
+        // this.backgroundMode.enable();
+        this.backgroundMode.setDefaults({ title: "title", text: 'title'});
+        this.backgroundMode.on('activate').subscribe(() => {
+            if(this.backgroundMode.isEnabled()){
+                this.backgroundMode.disableWebViewOptimizations();
+            }
+        });
+        
         if(!MediaController._mediaController){
             MediaController._mediaController = this;
         }
@@ -42,12 +61,14 @@ export class MediaController{
         return this._playing;
     }
     play = (spriteOrId?: string|number|undefined)=>{
+        this.backgroundMode.enable();
         let playValue = this.Sounds.play(spriteOrId);
         this._playing = true;
         this.events.dispatch("SoundPlayed",undefined);
         return playValue;
     }
     pause = (spriteOrId?: number|undefined)=>{
+        this.backgroundMode.disable();
         let pause = this.Sounds.pause(spriteOrId);
         this._playing = false;
         this.events.dispatch("SoundPaused",undefined);
