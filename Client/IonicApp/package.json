@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@angular/core": "^9.1.11",
+    "@angular/core": "^11.0.5",
     "@capacitor/android": "^2.1.2",
     "@capacitor/cli": "^2.1.2",
     "@capacitor/core": "^2.1.2",
